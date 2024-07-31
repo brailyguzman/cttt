@@ -13,8 +13,9 @@ int main() {
     game.user = 'X';
     game.cpu = 'O';
 
-    init_board(&game);
     while (1) {
+        init_board(&game);
+
         while (1) {
             int draw;
             int won;
