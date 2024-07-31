@@ -78,148 +78,73 @@ int *cpu_position(Game *game) {
         return position;
     }
 
-    // First Horizontal
-    if (game->board[0][0] == '*' && game->board[0][1] == game->cpu && game->board[0][2] == game->cpu) {
-        position[0] = 0;
-        position[1] = 0;
+    // Check if the user is about to win and block
+    for (int i = 0; i < 3; i++) {
+        // Check rows
+        if (game->board[i][0] == game->user && game->board[i][1] == game->user && game->board[i][2] == '*') {
+            position[0] = i;
+            position[1] = 2;
+            return position;
+        } else if (game->board[i][0] == game->user && game->board[i][1] == '*' && game->board[i][2] == game->user) {
+            position[0] = i;
+            position[1] = 1;
+            return position;
+        } else if (game->board[i][0] == '*' && game->board[i][1] == game->user && game->board[i][2] == game->user) {
+            position[0] = i;
+            position[1] = 0;
+            return position;
+        }
 
-        return position;
-    } else if (game->board[0][0] == game->cpu && game->board[0][1] == '*' && game->board[0][2] == game->cpu) {
-        position[0] = 0;
-        position[1] = 1;
-
-        return position;
-    } else if (game->board[0][0] == game->cpu && game->board[0][1] == game->cpu && game->board[0][2] == '*') {
-        position[0] = 0;
-        position[1] = 2;
-
-        return position;
+        // Check columns
+        if (game->board[0][i] == game->user && game->board[1][i] == game->user && game->board[2][i] == '*') {
+            position[0] = 2;
+            position[1] = i;
+            return position;
+        } else if (game->board[0][i] == game->user && game->board[1][i] == '*' && game->board[2][i] == game->user) {
+            position[0] = 1;
+            position[1] = i;
+            return position;
+        } else if (game->board[0][i] == '*' && game->board[1][i] == game->user && game->board[2][i] == game->user) {
+            position[0] = 0;
+            position[1] = i;
+            return position;
+        }
     }
 
-    // Second Horizontal
-    if (game->board[1][0] == '*' && game->board[1][1] == game->cpu && game->board[1][2] == game->cpu) {
-        position[0] = 1;
-        position[1] = 0;
-
-        return position;
-    } else if (game->board[1][0] == game->cpu && game->board[1][1] == '*' && game->board[1][2] == game->cpu) {
-        position[0] = 1;
-        position[1] = 1;
-
-        return position;
-    } else if (game->board[1][0] == game->cpu && game->board[1][1] == game->cpu && game->board[1][2] == '*') {
-        position[0] = 1;
-        position[1] = 2;
-
-        return position;
+    // Check for winning or blocking moves
+    for (int i = 0; i < 3; i++) {
+        // Check rows and columns
+        for (int j = 0; j < 3; j++) {
+            if (game->board[i][j] == '*') {
+                if ((game->board[i][(j + 1) % 3] == game->cpu && game->board[i][(j + 2) % 3] == game->cpu) ||
+                    (game->board[(i + 1) % 3][j] == game->cpu && game->board[(i + 2) % 3][j] == game->cpu)) {
+                    position[0] = i;
+                    position[1] = j;
+                    return position;
+                }
+            }
+        }
     }
 
-    // Third Horizontal
-    if (game->board[1][0] == '*' && game->board[1][1] == game->cpu && game->board[1][2] == game->cpu) {
-        position[0] = 1;
-        position[1] = 0;
-
-        return position;
-    } else if (game->board[1][0] == game->cpu && game->board[1][1] == '*' && game->board[1][2] == game->cpu) {
-        position[0] = 1;
-        position[1] = 1;
-
-        return position;
-    } else if (game->board[1][0] == game->cpu && game->board[1][1] == game->cpu && game->board[1][2] == '*') {
-        position[0] = 1;
-        position[1] = 2;
-
-        return position;
-    }
-
-    // First Diagonal
-    if (game->board[0][0] == '*' && game->board[1][1] == game->cpu && game->board[2][2] == game->cpu) {
-        position[0] = 0;
-        position[1] = 0;
-
-        return position;
-    } else if (game->board[0][0] == game->cpu && game->board[1][1] == '*' && game->board[2][2] == game->cpu) {
-        position[0] = 1;
-        position[1] = 1;
-
-        return position;
-    } else if (game->board[0][0] == game->cpu && game->board[1][1] == game->cpu && game->board[2][2] == '*') {
-        position[0] = 2;
-        position[1] = 2;
-
-        return position;
-    }
-
-    // Second Diagonal
-    if (game->board[0][2] == '*' && game->board[1][1] == game->cpu && game->board[2][0] == game->cpu) {
-        position[0] = 0;
-        position[1] = 2;
-
-        return position;
-    } else if (game->board[0][2] == game->cpu && game->board[1][1] == '*' && game->board[2][0] == game->cpu) {
-        position[0] = 1;
-        position[1] = 1;
-
-        return position;
-    } else if (game->board[0][2] == game->cpu && game->board[1][1] == game->cpu && game->board[2][0] == '*') {
-        position[0] = 2;
-        position[1] = 0;
-
-        return position;
-    }
-
-    // First Vertical
-    if (game->board[0][0] == '*' && game->board[1][0] == game->cpu && game->board[2][0] == game->cpu) {
-        position[0] = 0;
-        position[1] = 0;
-
-        return position;
-    } else if (game->board[0][0] == game->cpu && game->board[1][0] == '*' && game->board[2][0] == game->cpu) {
-        position[0] = 1;
-        position[1] = 0;
-
-        return position;
-    } else if (game->board[0][0] == game->cpu && game->board[1][0] == game->cpu && game->board[2][0] == '*') {
-        position[0] = 2;
-        position[1] = 0;
-
-        return position;
-    }
-
-    // Second Vertical
-    if (game->board[0][1] == '*' && game->board[1][1] == game->cpu && game->board[2][1] == game->cpu) {
-        position[0] = 0;
-        position[1] = 1;
-
-        return position;
-    } else if (game->board[0][1] == game->cpu && game->board[1][1] == '*' && game->board[2][1] == game->cpu) {
-        position[0] = 1;
-        position[1] = 1;
-
-        return position;
-    } else if (game->board[0][1] == game->cpu && game->board[1][1] == game->cpu && game->board[2][1] == '*') {
-        position[0] = 2;
-        position[1] = 1;
-
-        return position;
-    }
-
-    // Third Vertical
-    if (game->board[0][2] == '*' && game->board[1][2] == game->cpu && game->board[2][2] == game->cpu) {
-        position[0] = 0;
-        position[1] = 2;
-
-        return position;
-    } else if (game->board[0][2] == game->cpu && game->board[1][2] == '*' && game->board[2][2] == game->cpu) {
-        position[0] = 1;
-        position[1] = 2;
-
-        return position;
-    } else if (game->board[0][2] == game->cpu && game->board[1][2] == game->cpu && game->board[2][2] == '*') {
-        position[0] = 2;
-        position[1] = 2;
-
-        return position;
+    // Check diagonals
+    if (game->board[1][1] == game->cpu) {
+        if (game->board[0][0] == '*' && game->board[2][2] == game->cpu) {
+            position[0] = 0;
+            position[1] = 0;
+            return position;
+        } else if (game->board[0][0] == game->cpu && game->board[2][2] == '*') {
+            position[0] = 2;
+            position[1] = 2;
+            return position;
+        } else if (game->board[0][2] == '*' && game->board[2][0] == game->cpu) {
+            position[0] = 0;
+            position[1] = 2;
+            return position;
+        } else if (game->board[0][2] == game->cpu && game->board[2][0] == '*') {
+            position[0] = 2;
+            position[1] = 0;
+            return position;
+        }
     }
 
     while (1) {
@@ -254,38 +179,17 @@ int is_draw(Game *game) {
 }
 
 int won_game(Game *game, char player) {
-    // First Horizontal
-    if (game->board[0][0] == player && game->board[0][1] == player && game->board[0][2] == player) {
-        return 1;
-    }
-    // Second Horizontal
-    if (game->board[1][0] == player && game->board[1][1] == player && game->board[1][2] == player) {
-        return 1;
-    }
-    // Third Horizontal
-    if (game->board[2][0] == player && game->board[2][1] == player && game->board[2][2] == player) {
-        return 1;
+    // check rows and columns
+    for (int i = 0; i < 3; i++) {
+        if ((game->board[i][0] == player && game->board[i][1] == player && game->board[i][2] == player) ||
+            (game->board[0][i] == player && game->board[1][i] == player && game->board[2][i] == player)) {
+            return 1;
+        }
     }
 
-    // First Vertical
-    if (game->board[0][0] == player && game->board[1][0] == player && game->board[2][0] == player) {
-        return 1;
-    }
-    // Second Vertical
-    if (game->board[0][1] == player && game->board[1][1] == player && game->board[2][1] == player) {
-        return 1;
-    }
-    // Third Vertical
-    if (game->board[0][2] == player && game->board[1][2] == player && game->board[2][2] == player) {
-        return 1;
-    }
-
-    // First Diagonal
-    if (game->board[0][0] == player && game->board[1][1] == player && game->board[2][2] == player) {
-        return 1;
-    }
-    // Second Diagonal
-    if (game->board[0][2] == player && game->board[1][1] == player && game->board[2][0] == player) {
+    // check diagonals
+    if ((game->board[0][0] == player && game->board[1][1] == player && game->board[2][2] == player) ||
+        (game->board[0][2] == player && game->board[1][1] == player && game->board[2][0] == player)) {
         return 1;
     }
 
